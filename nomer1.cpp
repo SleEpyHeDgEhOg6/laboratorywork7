@@ -32,9 +32,12 @@ void loadFromFile(const std::string& filename, std::vector<std::string>& outData
 
 int main2() {//для loadFromFile
 	std::vector<std::string>otvet;
+	std::ifstream gt;
+	gt.open("lab71.txt");
 	loadFromFile("lab71.txt", otvet);
 	for (auto fg : otvet) {
 		std::cout << fg << std::endl;
 	}
+	gt.close();
 	return 0;
 }
