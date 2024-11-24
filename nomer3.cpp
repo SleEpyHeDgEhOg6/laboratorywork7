@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <map>
 #include <vector>
 #include <string>
-#include <map>
+
 using namespace std;
 enum Score
 {
@@ -52,4 +54,60 @@ int main1() {//для saveToFile
     return 0;
 }
 
+
+enum Score {
+    Unsatisfactory = 2,
+    Satisfactory,
+    Good,
+    Excellent
+};
+
+struct Student {
+    std::string Name;
+    int Year;
+    std::map<std::string, Score> RecordBook;
+};
+
+using Groups = std::map<std::string, std::vector<Student>>;
+
+void loadFromFile(const std::string& filename, Groups& outGroups) {
+    std::ifstream file(filename);
+    std::string rt, gr;//переменные,которые будут хранить текущую строку 
+    while (std::getline(file, rt)) {
+        if (isupper(rt[0])){//isupper проверяет заглавная это буква или нет,если да,то это название группы,а если нет,то информация о учащемся  
+            gr = rt;//присваиваем текущую группу 
+            outGroups[gr];//создаем новую группу
+        }
+        else {
+            std::istringstream ft(rt);//создает поток для данных из строки 
+            Student stu;//переменная stu,которая берет данные из struct Book
+            std::string sub;//переменная для хранения названия предметов 
+            ft >> stu.Name >> stu.Year;//считывает имя учащегося и год
+            while (ft >> sub) {//считывает пока там что-то есть
+                int sc;
+                ft >> sc;//считывает оценку для текущего учащегося и предмета
+            }
+            outGroups[gr].push_back(stu);
+        }
+    }
+    file.close();
+}
+
+int main2() {//для loadFromFile
+    Groups group;
+    std::ifstream yt;
+    yt.open("lab733.txt");
+    loadFromFile("lab733.txt", group);
+    for (auto q : group) {
+        std::cout << "Group:" << q.first << std::endl;
+        for (auto q1 : q.second) {
+            std::cout << "Name" << q1.Name << std::endl;
+            for (auto q2 : q1.RecordBook) {
+                std::cout << q2.first << q2.second << std::endl;
+            }
+        }
+    }
+    yt.close();
+    return 0;
+}
 
